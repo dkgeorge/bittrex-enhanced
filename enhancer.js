@@ -24,6 +24,8 @@ const CONSTANTS = {
   color: '#0072ed',
   colMinWidth: '100px',
   tvTrexPrefix: 'BITTREX',
+  tvChartURL: '//s3.tradingview.com/tv.js',
+  btcUsdtTrexApiURL: 'https://bittrex.com/api/v1.1/public/getticker?market=USDT-BTC',
   btcEthTrexApiURL: 'https://bittrex.com/api/v1.1/public/getticker?market=BTC-ETH',
   btcPriceDomExpr: '[data-bind="text:navigation.displayBitcoinUsd"]',
   loginNodeExpr: ".fa-sign-in",
@@ -108,6 +110,7 @@ function updateColumn(colClass, row, priceColIdx, marketType, priceVal){
     newNode.style.color = CONSTANTS.color;
     newNode.style.minWidth = CONSTANTS.colMinWidth;
     newNode.style.marginLeft = '10px';
+    newNode.style.textAlign = 'center';
     newNode.className = colClass;
     newNode.innerText = price;
     let nodeToInsertBefore = priceColIdx + 1 > cols.length ? -1 : cols[priceColIdx+1];
@@ -143,9 +146,11 @@ Enhancer.prices = {
 };
 Enhancer.interval = null;
 Enhancer.initBtcPrice = function initBtcPrice(){
-  const node = document.querySelectorAll(CONSTANTS.btcPriceDomExpr)[0];
-  const btcUsdPrice = parseFloat(node.innerText.split('=')[1].replace('$', ''));
-  return btcUsdPrice;
+    const btcTickerURL = CONSTANTS.btcUsdtTrexApiURL;
+    let xhr = new XMLHttpRequest();
+    xhr.open('GET', btcTickerURL, false);
+    xhr.send(null);
+    return JSON.parse(xhr.responseText).result.Last;
 }
 Enhancer.initEthPrice = function initEthPrice(){
   const ethTickerURL = CONSTANTS.btcEthTrexApiURL;
@@ -411,26 +416,37 @@ Enhancer.enhanceMarketHistoryTable = function enhanceMarketHistoryTable(table){
   }
 }
 Enhancer.initTradingViewWidget = function initTradingViewWidget(ticker, tradingViewOpts){
-    let opts = {};
-    Object.assign(opts, 
-      tradingViewOpts, {
-        symbol: ticker,
-        container_id: 'tv-chart-'+Enhancer.getTickerQP()
+    const script = document.createElement('script');
+    script.src = CONSTANTS.tvChartURL;
+    script.async = true;
+    script.addEventListener('load', function(){
+      let opts = {};
+      Object.assign(opts,
+        tradingViewOpts, {
+          symbol: ticker,
+          container_id: 'tv-chart-'+Enhancer.getTickerQP()
       });
     console.log(opts);
-    new TradingView.widget(opts);
+    let insertTradingViewChartCode = 'new TradingView.widget('+JSON.stringify(opts)+');';
+    const chartScript = document.createElement('script');
+    chartScript.type = 'text/javascript';
+    chartScript.innerText = insertTradingViewChartCode;
+    document.body.appendChild(chartScript);
+  });
+  document.head.appendChild(script);
 }
 Enhancer.getTickerQP = function getTickerQP(){
   let qps = document.location.search.substring(1);
   return qps.indexOf(CONSTANTS.tickerQueryParamName) > -1 ? qps.split('&')[0].split('=')[1] : '';
 }
 Enhancer.swapCharts = function swapCharts(tradingViewOpts){
-  const charts = document.querySelectorAll('.chart-wrapper');
-  if(charts.length === 2){ // timeline, orderbook
+  const charts = document.querySelectorAll('#market-charts');
+  if(charts.length === 1){ // timeline, orderbook
     // Clean
     let node = charts[0];
-    let existingChart = node.getElementsByTagName("iframe")[0];
-    existingChart.remove();
+    while (node.firstChild) {
+        node.removeChild(node.firstChild);
+    }
     let ticker = Enhancer.getTickerQP();
     let t = ticker.split('-');
     let tradingViewTicker = CONSTANTS.tvTrexPrefix + ':' + t[1] + t[0]; // e.g. BTC-NEO => BITTREX:NEOBTC

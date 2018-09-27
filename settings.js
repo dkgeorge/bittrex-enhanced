@@ -81,8 +81,8 @@ function updateConfigTvObj(prop){
                 if(tgt.id === 'tvConfHide_side_toolbar'){
                     val = !val; // inverse UX
                     // ensure that height > 550 if enabled..
-                    if(val && opts.height < 550){
-                        opts.height = 550;
+                    if(val && opts.height < 400){
+                        opts.height = 400;
                         let node = getConfigNodes().tvChartOpts.tvConfHeight;
                         node.value = opts.height;
                     }
