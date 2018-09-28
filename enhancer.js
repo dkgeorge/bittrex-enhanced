@@ -336,7 +336,7 @@ Enhancer.enhanceBalanceTable = function balanceTable(table){
 Enhancer.enhanceOrderTable = function enhanceOrderTable(type, table){
   const rows = table.getElementsByTagName('tr');
   if(rows && rows.length > 1){
-    let priceColIdx = type === 'buy' ? 4 : 1;
+    let priceColIdx = type === 'buy' ? 4 : 2;
     let title = type === 'buy' ? 'BID' : 'ASK';
     let isUsdtMarket = Enhancer.getMarketType() === 'usdt';
     let isLoggedIn = document.querySelectorAll(CONSTANTS.loginNodeExpr).length === 0;
@@ -355,7 +355,7 @@ Enhancer.enhanceOrderTable = function enhanceOrderTable(type, table){
       let alreadyInserted = getChildNodeWithClass(row, CONSTANTS.classes.estPrice);
       let priceIdx = priceColIdx;
       if(alreadyInserted){
-        priceIdx += type === 'buy' ? 1 : 1;
+        priceIdx += type === 'buy' ? 1 : -1;
       }
       updateColumn(CONSTANTS.classes.estPrice, row, priceIdx);
     };
