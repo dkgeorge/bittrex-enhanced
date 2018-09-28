@@ -91,6 +91,7 @@ function updateHeader(headerId, row, colIdx, text){
   const enhancedHeader = document.createElement('th');
   enhancedHeader.id = headerId;
   enhancedHeader.style.color = CONSTANTS.color;
+  enhancedHeader.style.textAlign = 'center';
   enhancedHeader.innerText = text;
   if(nodeToInsertBefore === -1){
     row.appendChild(enhancedHeader);
@@ -512,6 +513,7 @@ Enhancer.getDataProcessors = function getDataProcessors(proc, opts){
           Enhancer.updatePrices();
           Enhancer.interval = setInterval(function(){
             let tables = Enhancer.getMarketsTables();
+            Enhancer.enhanceMarketsTable(tables[1]);
             Enhancer.enhanceMarketsTable(tables[2]);
             Enhancer.enhanceMarketsTable(tables[3]);
           }, 300);
