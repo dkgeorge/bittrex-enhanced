@@ -54,7 +54,7 @@ function updateConfigBool(prop){
         let val = tgt.getAttribute('data-enabled') === 'true' ? true : false;
         data['bittrex-enhanced-'+prop] = !val;
         tgt.setAttribute('data-enabled', String(!val));
-        chrome.storage.sync.set(data);
+        browser.storage.sync.set(data);
     };
 }
 function updateConfigTvObj(prop){
@@ -74,7 +74,7 @@ function updateConfigTvObj(prop){
                 }
             }
         }
-        chrome.storage.sync.get('bittrex-enhanced-tvChartOpts', function(data){
+        browser.storage.sync.get('bittrex-enhanced-tvChartOpts', function(data){
             let opts = data['bittrex-enhanced-tvChartOpts']; 
             if(isCheckbox){
                 val = tgt.checked;
@@ -89,7 +89,7 @@ function updateConfigTvObj(prop){
                 }
             }
             opts[prop] = val;
-            chrome.storage.sync.set({
+            browser.storage.sync.set({
                 'bittrex-enhanced-tvChartOpts': opts
             });
         });
@@ -125,7 +125,7 @@ function initConfigBoolean(prop, node, val){
     node.onclick = updateConfigTvObj(prop);
 }
 function initConfig(configNodes){
-    chrome.storage.sync.get([
+    browser.storage.sync.get([
         'bittrex-enhanced-usdVal',
         'bittrex-enhanced-tvChart'
     ], function(data) {
@@ -136,7 +136,7 @@ function initConfig(configNodes){
     });
 }
 function initConfigTradingViewOpts(nodes){
-    chrome.storage.sync.get('bittrex-enhanced-tvChartOpts', function(data){
+    browser.storage.sync.get('bittrex-enhanced-tvChartOpts', function(data){
         data = data['bittrex-enhanced-tvChartOpts'];
         initConfigText('width', nodes.tvConfWidth, data.width);
         initConfigText('height', nodes.tvConfHeight, data.height);
