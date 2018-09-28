@@ -27,7 +27,7 @@
         "https://*.bittrex.com/Market/Index?MarketName=BTC-*",
         "https://*.bittrex.com/Market/Index?MarketName=ETH-*",
         "https://*.bittrex.com/Market/Index?MarketName=USDT-*",
-	"https://*.bittrex.com/balance",
+        "https://*.bittrex.com/balance",
         "https://*.bittrex.com/Balance",
         "https://*.bittrex.com/history",
         "https://*.bittrex.com/History",
