@@ -1,4 +1,4 @@
-html { height:100%; width:100%; }
+html { height:100%; width:100%; font-family: Arial !important; font-size: 0.75em !important;}
 body{ width:225px; height:400px; padding:10px 5px; }
 body h1 { text-align: center; margin:0 auto; border-bottom:1px solid #eee; padding-bottom:0; }
 body h3 { border-bottom:1px solid #eee; padding-bottom:15px; }
