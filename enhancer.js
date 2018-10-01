@@ -447,14 +447,14 @@ Enhancer.swapCharts = function swapCharts(tradingViewOpts){
   depthScript.innerText = '\
   function depthEnable() {                                      \
     var depthChart = document.getElementById("charts-tab-1");   \
-    (depthEnableCheckBox.checked) ?                             \
+    (depthEnableCheckbox.checked) ?                             \
     (depthChart.style.display = "block") :                      \
     (depthChart.style.display = "none")                         \
     }';
   document.head.appendChild(depthScript);
   const depthEnable = document.createElement('input');
   depthEnable.type = 'checkbox';
-  depthEnable.id = 'depthEnableCheckBox';
+  depthEnable.id = 'depthEnableCheckbox';
   depthEnable.setAttribute('onclick', 'depthEnable()');
   const depthCheckbox = document.createElement('label');
   depthCheckbox.innerHTML = 'Enable Depth Chart ';
