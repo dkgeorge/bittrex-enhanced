@@ -441,6 +441,29 @@ Enhancer.getTickerQP = function getTickerQP(){
   return qps.indexOf(CONSTANTS.tickerQueryParamName) > -1 ? qps.split('&')[0].split('=')[1] : '';
 }
 Enhancer.swapCharts = function swapCharts(tradingViewOpts){
+  // Depth Chart
+  const depthScript = document.createElement('script');
+  depthScript.type = 'text/javascript';
+  depthScript.innerText = '\
+  function depthEnable() {                                      \
+    var depthChart = document.getElementById("charts-tab-1");   \
+    (depthEnableCheckbox.checked) ?                             \
+    (depthChart.style.display = "block") :                      \
+    (depthChart.style.display = "none")                         \
+    }';
+  document.head.appendChild(depthScript);
+  const depthEnable = document.createElement('input');
+  depthEnable.type = 'checkbox';
+  depthEnable.id = 'depthEnableCheckbox';
+  depthEnable.setAttribute('onclick', 'depthEnable()');
+  const depthCheckbox = document.createElement('label');
+  depthCheckbox.innerHTML = 'Enable Depth Chart ';
+  depthCheckbox.style.marginBottom = '0px';
+  depthCheckbox.style.fontWeight = 'normal';
+  depthCheckbox.appendChild(depthEnable);
+  const depthChart = document.querySelector('#charts-tab-1');
+  depthChart.querySelector('#orderBook_section').style.paddingTop = '0px';
+  //
   const charts = document.querySelectorAll('#market-charts');
   if(charts.length === 1){ // timeline, orderbook
     // Clean
@@ -454,6 +477,8 @@ Enhancer.swapCharts = function swapCharts(tradingViewOpts){
     const newChartParent = document.createElement('div');
     newChartParent.id = "tv-chart-"+ticker;
     node.appendChild(newChartParent);
+    node.appendChild(depthCheckbox);
+    node.appendChild(depthChart);
     // Load TV
     Enhancer.initTradingViewWidget(tradingViewTicker, tradingViewOpts);
   }
