@@ -181,7 +181,8 @@ Enhancer.getMarketType = function getMarketType(mktType){
   }
   return Enhancer.marketType = (mkt === 'btc' ? 'btc' : 
                                (mkt === 'eth' ? 'eth' : 
-                               (mkt === 'usdt' ? 'usdt' : '')));
+			       (mkt === 'usd' ? 'usdt' :
+                               (mkt === 'usdt' ? 'usdt' : ''))));
 }
 Enhancer.getCurrentPrice = function getCurrentPrice(marketType){
   let mkt = marketType || Enhancer.getMarketType();
